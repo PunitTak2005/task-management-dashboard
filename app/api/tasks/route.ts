@@ -11,10 +11,17 @@ const taskSchema = z.object({
 });
 
 export async function GET() {
-  const tasks = await prisma.task.findMany({
-    orderBy: { createdAt: 'desc' },
-  });
-  return NextResponse.json(tasks);
+  try {
+    const tasks = await prisma.task.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
+    return NextResponse.json(tasks);
+  } catch (e: any) {
+    return NextResponse.json(
+      { error: 'Failed to fetch tasks', message: e.message || String(e) },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST(request: Request) {
