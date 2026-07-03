@@ -1,8 +1,8 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/src/prisma/client';
 import { z } from 'zod';
 import { NextResponse } from 'next/server';
 
-const prisma = new PrismaClient();
+export const dynamic = 'force-dynamic';
 
 const taskSchema = z.object({
   title: z.string().min(1),
