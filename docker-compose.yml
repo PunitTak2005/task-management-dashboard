@@ -1,0 +1,28 @@
+# version removed for compatibility
+
+services:
+  db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: taskdb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+  app:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - '3007:3000'
+    depends_on:
+      - db
+    command: sh -c "npx prisma migrate deploy && npm run dev"
+
+volumes:
+  pgdata:
